@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Port Solana — Sun, Cash &amp; Sirens</title>
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:#1a120b;font-family:Verdana,Geneva,sans-serif;color:#fff}
+  #scene{position:fixed;inset:0;display:block}
+  .hidden{display:none!important}
+  /* HUD */
+  #hud{position:fixed;inset:0;pointer-events:none;z-index:5}
+  #topbar{position:absolute;top:12px;right:16px;text-align:right;text-shadow:2px 2px 3px #000}
+  #cash{font-size:26px;font-weight:bold;color:#7dff8a}
+  #wanted{font-size:24px;color:#ffd23e;letter-spacing:3px;min-height:30px}
+  #wanted .off{color:rgba(255,255,255,.25)}
+  #healthwrap{position:absolute;top:12px;left:16px;width:230px}
+  #healthlabel{font-size:12px;text-shadow:1px 1px 2px #000;letter-spacing:1px}
+  #healthbar{height:14px;background:rgba(0,0,0,.55);border:2px solid #fff;border-radius:4px;overflow:hidden}
+  #healthfill{height:100%;width:100%;background:linear-gradient(90deg,#e33,#f80);transition:width .2s}
+  #bustwrap{margin-top:6px}
+  #bustbar{height:8px;background:rgba(0,0,0,.55);border:1px solid #7ab8ff;border-radius:4px;overflow:hidden}
+  #bustfill{height:100%;width:0%;background:#4da3ff}
+  #objective{position:absolute;top:86px;left:50%;transform:translateX(-50%);max-width:70%;background:rgba(10,10,20,.62);padding:8px 18px;border-radius:8px;font-size:16px;text-align:center;border:1px solid rgba(255,210,62,.6)}
+  #minimap{position:absolute;left:16px;bottom:16px;width:190px;height:190px;border:3px solid rgba(255,255,255,.85);border-radius:10px;background:#20303a;box-shadow:0 4px 14px rgba(0,0,0,.5)}
+  #speedo{position:absolute;right:20px;bottom:20px;font-size:22px;text-shadow:2px 2px 3px #000;text-align:right}
+  #hint{position:absolute;bottom:220px;left:16px;font-size:13px;background:rgba(0,0,0,.5);padding:5px 10px;border-radius:6px}
+  #dialog{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);width:min(680px,86%);background:rgba(8,8,16,.88);border:2px solid #ffd23e;border-radius:10px;padding:14px 20px;pointer-events:auto}
+  #dialogName{color:#ffd23e;font-weight:bold;font-size:15px;margin-bottom:5px}
+  #dialogText{font-size:16px;line-height:1.45}
+  #dialogNext{margin-top:9px;font-size:12px;color:#bbb}
+  /* Screens */
+  .screen{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:linear-gradient(180deg,rgba(20,8,30,.45),rgba(10,4,14,.78))}
+  #title{font-size:64px;font-weight:bold;letter-spacing:2px;color:#ffd23e;text-shadow:0 4px 0 #c2431e,0 8px 24px #000;margin:0}
+  #subtitle{font-size:20px;color:#ffb37d;margin:6px 0 14px;text-shadow:1px 1px 3px #000}
+  #story{max-width:620px;font-size:15px;line-height:1.55;background:rgba(0,0,0,.55);padding:14px 20px;border-radius:10px}
+  #controls{margin:14px 0;font-size:13.5px;line-height:1.7;background:rgba(0,0,0,.45);padding:10px 22px;border-radius:10px;text-align:left}
+  .btn{pointer-events:auto;cursor:pointer;background:#e8641e;color:#fff;border:2px solid #ffd23e;font-size:19px;font-weight:bold;padding:11px 34px;border-radius:9px;margin:6px;box-shadow:0 4px 10px rgba(0,0,0,.5)}
+  .btn:hover{background:#ff7d33}
+  .btn.secondary{background:#37455a;border-color:#9db8d6}
+  #bannerTitle,.screenTitle{font-size:52px;color:#ffd23e;text-shadow:0 4px 14px #000;margin:0 0 8px}
+  #bannerText,.screenText{font-size:19px;text-shadow:1px 1px 3px #000;max-width:560px;line-height:1.5}
+</style>
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.min.js" } }
+</script>
+</head>
+<body>
+<canvas id="scene"></canvas>
+
+<div id="hud" class="hidden">
+  <div id="healthwrap">
+    <div id="healthlabel">RIO VALDEZ — HEALTH</div>
+    <div id="healthbar"><div id="healthfill"></div></div>
+    <div id="bustwrap"><div id="healthlabel" style="color:#9ecbff">BUSTED METER</div><div id="bustbar"><div id="bustfill"></div></div></div>
+  </div>
+  <div id="topbar"><div id="wanted"></div><div id="cash">$0</div></div>
+  <div id="objective"></div>
+  <canvas id="minimap" width="190" height="190"></canvas>
+  <div id="hint" class="hidden">Press <b>E</b> to enter vehicle</div>
+  <div id="speedo" class="hidden">0 km/h</div>
+  <div id="dialog" class="hidden"><div id="dialogName"></div><div id="dialogText"></div><div id="dialogNext">Click or press Enter ▸</div></div>
+</div>
+
+<div id="titleScreen" class="screen">
+  <h1 id="title">PORT SOLANA</h1>
+  <div id="subtitle">Sun, Cash &amp; Sirens — an original open-world caper</div>
+  <div id="story">Dockhand Rio Valdez finds a duffel of marked bills on Pier 9 — and every crew in Port Solana wants it back. Run jobs for harbour fixer Marisol Vega, out-drive the Solana PD, and buy Rio a boat out of town before the tide — and the law — closes in.</div>
+  <div id="controls">
+    <b>W A S D</b> walk / drive &nbsp;•&nbsp; <b>Shift</b> run &nbsp;•&nbsp; <b>Mouse</b> aim, <b>Click</b> shoot<br>
+    <b>E</b> enter / exit car (stealing raises wanted) &nbsp;•&nbsp; <b>F</b> punch &nbsp;•&nbsp; <b>Space</b> handbrake<br>
+    <b>P / Esc</b> pause &nbsp;•&nbsp; <b>M</b> mute &nbsp;•&nbsp; Follow the gold marker on the minimap
+  </div>
+  <div>
+    <button class="btn" id="btnNew">NEW GAME</button>
+    <button class="btn secondary" id="btnContinue">CONTINUE</button>
+  </div>
+</div>
+
+<div id="pauseScreen" class="screen hidden">
+  <h2 class="screenTitle">PAUSED</h2>
+  <p class="screenText">Port Solana waits for no one — except now.</p>
+  <div><button class="btn" id="btnResume">RESUME</button><button class="btn secondary" id="btnRestart">RESTART STORY</button></div>
+</div>
+
+<div id="bannerScreen" class="screen hidden">
+  <h2 id="bannerTitle">MISSION COMPLETE</h2>
+  <p id="bannerText"></p>
+  <div><button class="btn" id="btnBanner">CONTINUE</button></div>
+</div>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
