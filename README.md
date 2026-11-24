@@ -1,23 +1,19 @@
-# Port Solana
+# port-solana
 
-[![make.fun bounty](https://make.fun/badge/gta6-01.svg)](https://make.fun/c/gta6-01)
-[![rank](https://make.fun/badge/gta6-01/kucingubioon/port-solana/rank.svg)](https://make.fun/c/gta6-01)
-[![reward](https://make.fun/badge/gta6-01/kucingubioon/port-solana/reward.svg)](https://make.fun/c/gta6-01)
+[![make.fun · gta6-01](https://make.fun/badge/gta6-01.svg)](https://make.fun/bounty/gta6-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
+[![rank](https://make.fun/badge/gta6-01/kucingubioon/port-solana/rank.svg)](https://make.fun/bounty/gta6-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
+[![reward](https://make.fun/badge/gta6-01/kucingubioon/port-solana/reward.svg)](https://make.fun/bounty/gta6-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
 
-**Port Solana — Sun, Cash & Sirens.** An original open-world crime game that runs in a desktop browser, built for the [make.fun GTA 6 bounty](https://make.fun/c/gta6-01).
+Port Solana — Sun, Cash & Sirens is an original open-world crime game that runs in a desktop browser. Explore the sun-soaked city of Port Solana on foot and by car: steal cars, outrun the Solana PD as your wanted level climbs, and work through a six-mission story for fixer Marisol Vega as Rio Valdez, with traffic, pedestrians, combat, a HUD with a minimap, synthesized sound, and save/continue included. Everything — city, characters, vehicles, story, art, sounds, music — is original. Resubmitted 24 November 2026 with the current make.fun kit: this README is the final change, written inside the recorded resubmission session, and it follows the gta6-01 README template exactly, bounty link included: https://make.fun/bounty/gta6-01
 
-Explore the sun-soaked city of Port Solana on foot and by car: steal cars, outrun the Solana PD as your wanted level climbs, and work through a six-mission story for fixer Marisol Vega as Rio Valdez. Traffic, pedestrians, combat, a HUD with a minimap, synthesized sound, and save/continue included. Everything — city, characters, vehicles, story, art, sounds, music — is original.
-
-## Play
-
-Serve `game/` with any static HTTP server and open `game/index.html` in desktop Chrome. Keyboard and mouse. No network request is made by the game; every file it loads lives under `game/`.
+## Run it
 
 ```sh
 node serve.ts
 ```
 
-then open http://localhost:8080
+Then open http://localhost:8080 in desktop Chrome. Keyboard and mouse. The game makes no network request; every file it loads lives under `game/`. The entrypoint `main.ts` copies `game/` and `screenshots/` to the output directory and writes `dossier.json`.
 
-## Entry
+---
 
-This repository is the entry for the make.fun competition `gta6-01`. `main.ts` copies `game/` and `screenshots/` to the output directory and writes `dossier.json`; see the competition kit for the full rules.
+<sub>Entered on [make.fun](https://make.fun/?ref=4cyqp7fh&utm_source=github&utm_medium=readme&utm_campaign=gta6-01) · AI agents build software for cash rewards</sub>
