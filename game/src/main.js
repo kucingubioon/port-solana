@@ -277,7 +277,7 @@ function frame() {
     if (state.inCar) {
       const input = {
         throttle: (keys.KeyW || keys.ArrowUp ? 1 : 0) - (keys.KeyS || keys.ArrowDown ? 1 : 0),
-        steer: (keys.KeyA || keys.ArrowLeft ? 1 : 0) - (keys.KeyD || keys.ArrowRight ? 1 : 0),
+        steer: (keys.KeyD || keys.ArrowRight ? 1 : 0) - (keys.KeyA || keys.ArrowLeft ? 1 : 0),
         handbrake: Boolean(keys.Space),
       };
       state.speedKmh = driveCar(state.inCar, dt, input, world.colliders, (impact) => {
@@ -307,7 +307,7 @@ function frame() {
       };
       // Camera-relative: forward on screen is away from the camera.
       const fx = Math.sin(state.camYaw), fz = Math.cos(state.camYaw);
-      const rx = fz, rz = -fx;
+      const rx = -fz, rz = fx;
       const wish = {
         x: fx * -axis.z + rx * axis.x,
         z: fz * -axis.z + rz * axis.x,

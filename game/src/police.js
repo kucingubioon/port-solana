@@ -20,7 +20,9 @@ export class PoliceSystem {
     this.wanted = Math.min(5, this.wanted + points);
     this.unseenT = 0;
   }
-  desiredUnits() { return this.wanted === 0 ? 0 : Math.min(2 + this.wanted, 6); }
+  // Kinder floor for casual players (Lisa, 25 Nov 2026): 1 star sends 2 units,
+  // 2 stars 3; the top end (3-5 stars) stays at full pressure.
+  desiredUnits() { return [0, 2, 3, 5, 6, 6][this.wanted]; }
 
   spawnUnit(targetPos) {
     const spots = [
@@ -30,7 +32,7 @@ export class PoliceSystem {
     ];
     const s = spots[Math.floor(Math.random() * spots.length)];
     const unit = new Car(this.scene, s.x + (Math.random() * 8 - 4), s.z + (Math.random() * 8 - 4), Math.random() * 6.28, 0xffffff, true);
-    unit.cruise = 15 + this.wanted * 1.6;
+    unit.cruise = 13.5 + this.wanted * 1.9; // 1 star 15.4, 5 stars 23.0 (top speed unchanged)
     this.units.push(unit);
   }
 
@@ -65,13 +67,13 @@ export class PoliceSystem {
       u.syncMesh();
     }
     // Bust meter: fills when police are close and the player is slow.
-    if (closeUnits > 0 && playerSpeed < 3.2) this.bust += dt * 0.34 * closeUnits;
+    if (closeUnits > 0 && playerSpeed < 3.2) this.bust += dt * 0.28 * closeUnits;
     else this.bust = Math.max(0, this.bust - dt * 0.3);
     if (this.bust >= 1) { this.bust = 0; return 'busted'; }
     // Wanted decays while unseen.
     if (this.wanted > 0 && !this.seenByPolice) {
       this.unseenT += dt;
-      if (this.unseenT > 7) { this.wanted -= 1; this.unseenT = 0; }
+      if (this.unseenT > 5) { this.wanted -= 1; this.unseenT = 0; }
     } else this.unseenT = 0;
     return null;
   }
